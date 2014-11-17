@@ -1,0 +1,27 @@
+{
+  "name": "express-waf",
+  "version": "0.0.1",
+  "description": "A simple Web Application Firewall (WAF)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DSALabHRW/express-waf.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "Express",
+    "WAF"
+  ],
+  "author": "Marc Jansen",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/DSALabHRW/express-waf/issues"
+  },
+  "homepage": "https://github.com/DSALabHRW/express-waf",
+  "dependencies": {
+    "express": "^4.10.2"
+  }
+}
