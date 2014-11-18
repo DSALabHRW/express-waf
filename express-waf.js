@@ -13,11 +13,23 @@
     };
 
     module.exports.check = function (req, res, cb) {
-        for (var m in modules) {
-            modules[m].check(req, res);
-        }
-        if (cb) {
+        recursiveCall(0, function () {
             cb();
+        });
+
+        /**
+         * This iterates over all modules and run on them function check
+         * @param i {int} iterator
+         * @param callback {function} Callback after iteration ended
+         */
+        function recursiveCall(i, callback) {
+            if(i >= modules.length) {
+                callback();
+            } else {
+                modules[i].check(req, res, function () {
+                    recursiveCall(++i, callback);
+                })
+            }
         }
     };
 })();
