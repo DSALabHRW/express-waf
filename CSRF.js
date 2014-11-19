@@ -1,9 +1,13 @@
 (function() {
+
     var _config;
     var _blocker;
-    function CSRF(config, blocker) {
+    var _logger;
+
+    function CSRF(config, blocker, logger) {
         _config = config;
         _blocker = blocker;
+        _logger = logger;
     }
 
     /**
@@ -47,6 +51,7 @@
          * @param _host
          */
         function handleAttack(_host) {
+            _logger.logAttack('CSRF', _host)
             _blocker.blockHost(_host);
             res.status(403).end();
         }
