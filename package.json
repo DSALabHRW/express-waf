@@ -23,6 +23,7 @@
   "homepage": "https://github.com/DSALabHRW/express-waf",
   "dependencies": {
     "express": "^4.10.2",
+    "log4js": "^0.6.21",
     "xemplar": "0.0.8"
   }
 }
