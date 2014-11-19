@@ -3,9 +3,9 @@
     var _blocker;
 
     function ExpressWAF(blockerConfig) {
-        this.addModule('./blocker', blockerConfig, function(error) {
-           console.log(error);
-        });
+        var BlockerClass = require('./blocker');
+        _blocker = new BlockerClass(blockerConfig);
+        _modules.push(_blocker);
     };
 
     ExpressWAF.prototype.addModule = function (moduleName, config, callback) {
