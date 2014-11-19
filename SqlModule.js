@@ -5,18 +5,20 @@
     var _config;
     var _patternSql  = [];
     var _blocker;
+    var _logger;
 
-    function SqlModule(config, blocker) {
-        console.log('configure SQLInjModule!');
+    function SqlModule(config, blocker, logger) {
+        _logger.log('configure SQLInjModule!');
         _config = config;
         _blocker = blocker;
+        _logger = logger;
 
         var _xemplar = require('xemplar');
         _patternSql.push(_xemplar.security.sql)
     };
 
     SqlModule.prototype.check = function (req, res, cb) {
-        console.log("Check SQL Injection");
+        logger.log('Check SQL Injection');
         var _host = req.ip;
 
         if (req.method === 'GET' || req.method === 'DELETE') {
@@ -26,7 +28,7 @@
         }
 
         function checkPostOrPutRequest(req, res, cb) {
-            if (req.body != null) {
+            if (req.body) {
                 for(var i in req.body) {
                     for(var j in _patternSql){
                         if (_patternSql[j].test(req.body[i]) && _blocker.blockHost) {
@@ -60,7 +62,7 @@
         };
 
         function handleAttack() {
-            console.log("SQL Injection detected!");
+            _logger.logAttack('SQL Injection', _host);
             _blocker.blockHost(_host);
             res.status(403).send('Forbidden');
         };

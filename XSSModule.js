@@ -24,13 +24,15 @@
         }
         
         function checkPostOrPutRequest(req, res, cb) {
-            req.body.forEach(function(reqElement) {
-                _patterns.forEach(function(pattern) {
-                    if (pattern.test(reqElement) && _blocker.blockHost) {
-                        handleAttack(_host);
-                    }
+            if (req.body) {
+                req.body.forEach(function (reqElement) {
+                    _patterns.forEach(function (pattern) {
+                        if (pattern.test(reqElement) && _blocker.blockHost) {
+                            handleAttack(_host);
+                        }
+                    });
                 });
-            });
+            }
             if (cb) {
                 cb();
             }
@@ -50,7 +52,7 @@
 
         function handleAttack(_host) {
             _blocker.blockHost(_host);
-            _logger.log('XSSAttack', _host);
+            _logger.logAttack('XSSAttack', _host);
             res.status(403).end();
         };
     };
