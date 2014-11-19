@@ -7,9 +7,13 @@
         _logger = log4js.getLogger();
     };
 
-    Logger.prototype.log = function(attackType, host) {
+    Logger.prototype.logAttack = function(attackType, host) {
         _logger.warn('Attack: ' + attackType + ' detected from host: ' + host);
     };
+
+    Logger.prototype.log = function(str) {
+        _logger.info(str);
+    }
 
     module.exports = Logger;
 
