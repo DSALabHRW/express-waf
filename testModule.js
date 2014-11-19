@@ -2,12 +2,14 @@
 
     var _config;
 
-    module.exports.check = function(req, res, cb) {
+    function TestModule(config) {
+        _config = config;
+    };
+
+    TestModule.prototype.check = function(req, res, cb) {
         console.log(req.url);
     };
 
-    module.exports.init = function(config) {
-        _config = config;
-    };
+    module.exports = TestModule;
 
 })();

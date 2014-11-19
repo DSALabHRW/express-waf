@@ -1,6 +1,9 @@
 var express = require('express');
 var app = express();
-var waf = require('./express-waf');
+var ExpressWAF = require('./express-waf');
+var waf = new ExpressWAF({
+    blockTime: 7200 * 1000
+});
 
 waf.addModule('./testModule', {}, function(error) {
     console.log(error);

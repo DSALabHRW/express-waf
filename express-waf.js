@@ -1,18 +1,26 @@
 (function() {
-    var modules = [];
+    var _modules = [];
+    var _blocker;
 
-    module.exports.addModule = function (moduleName, config, callback) {
-        var firewallModule = require(moduleName);
+    function ExpressWAF(blockerConfig) {
+        this.addModule('./blocker', blockerConfig, function(error) {
+           console.log(error);
+        });
+    };
 
-        if (firewallModule.check && firewallModule.init) {
-            firewallModule.init(config);
-            modules.push(firewallModule);
+    ExpressWAF.prototype.addModule = function (moduleName, config, callback) {
+        var FirewallModuleClass = require(moduleName);
+        var firewallModule;
+
+        if (FirewallModuleClass.prototype.check) {
+            firewallModule = new FirewallModuleClass(config);
+            _modules.push(firewallModule);
         } else {
             callback(moduleName + ' does not define a check and an init function!');
         }
     };
 
-    module.exports.check = function (req, res, cb) {
+    ExpressWAF.prototype.check = function (req, res, cb) {
         recursiveCall(0, function () {
             cb();
         });
@@ -23,13 +31,15 @@
          * @param callback {function} Callback after iteration ended
          */
         function recursiveCall(i, callback) {
-            if(i >= modules.length) {
+            if(i >= _modules.length) {
                 callback();
             } else {
-                modules[i].check(req, res, function () {
+                _modules[i].check(req, res, function () {
                     recursiveCall(++i, callback);
                 })
             }
         }
     };
+
+    module.exports = ExpressWAF;
 })();
