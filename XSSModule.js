@@ -25,8 +25,7 @@
             req.body.forEach(function(reqElement) {
                 _patterns.forEach(function(pattern) {
                     if (pattern.test(reqElement) && _blocker.blockHost) {
-                        _blocker.blockHost(_host);
-                        res.status(403).end();
+                        handleAttack(_host);
                     }
                 });
             });
@@ -39,13 +38,17 @@
             var _url = req.url;
             _patterns.forEach(function(pattern) {
                 if (pattern.test(_url) && _blocker.blockHost) {
-                    _blocker.blockHost(_host);
-                    res.status(403).end();
+                    handleAttack(_host);
                 }
             });
             if (cb) {
                 cb();
             }
+        };
+
+        function handleAttack(_host) {
+            _blocker.blockHost(_host);
+            res.status(403).end();
         };
     };
 
