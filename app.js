@@ -8,6 +8,9 @@ var waf = new ExpressWAF({
 waf.addModule('./testModule', {}, function(error) {
     console.log(error);
 });
+waf.addModule('./XSSModule', {}, function(error) {
+    console.log(error);
+});
 
 app.use(waf.check);
 app.get('/', function(req, res) {
