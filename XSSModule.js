@@ -3,13 +3,15 @@
     var _config;
     var _patterns = [];
     var _blocker;
+    var _logger;
 
-    function XSSModule(config, blocker) {
+    function XSSModule(config, blocker, logger) {
         var _xemplar = require('xemplar');
         _patterns.push(_xemplar.security.xss.simple);
         _patterns.push(_xemplar.security.xss.img);
         _patterns.push(_xemplar.security.xss.paranoid);
         _blocker = blocker;
+        _logger = logger;
     };
 
     XSSModule.prototype.check = function(req, res, cb) {
@@ -48,6 +50,7 @@
 
         function handleAttack(_host) {
             _blocker.blockHost(_host);
+            _logger.log('XSSAttack', _host);
             res.status(403).end();
         };
     };

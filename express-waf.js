@@ -1,9 +1,13 @@
 (function() {
     var _modules = [];
     var _blocker;
+    var _logger;
 
     function ExpressWAF(blockerConfig) {
+        var LoggerClass = require('./logger');
         var BlockerClass = require('./blocker');
+
+        _logger = new LoggerClass();
         _blocker = new BlockerClass(blockerConfig);
         _modules.push(_blocker);
     };
@@ -13,7 +17,7 @@
         var firewallModule;
 
         if (FirewallModuleClass.prototype.check) {
-            firewallModule = new FirewallModuleClass(config, _blocker);
+            firewallModule = new FirewallModuleClass(config, _blocker, _logger);
             _modules.push(firewallModule);
         } else {
             callback(moduleName + ' does not define a check and an init function!');

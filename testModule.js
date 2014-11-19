@@ -2,14 +2,16 @@
 
     var _config;
     var _blocker;
+    var _logger;
 
-    function TestModule(config, blocker) {
+    function TestModule(config, blocker, logger) {
         _config = config;
         _blocker = blocker;
+        _logger = logger;
     };
 
     TestModule.prototype.check = function(req, res, cb) {
-        console.log(req.url);
+        _logger.log('testAttack', req.ip);
         if (cb) {
             cb();
         }
