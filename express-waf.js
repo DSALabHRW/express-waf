@@ -13,7 +13,7 @@
         var firewallModule;
 
         if (FirewallModuleClass.prototype.check) {
-            firewallModule = new FirewallModuleClass(config);
+            firewallModule = new FirewallModuleClass(config, _blocker);
             _modules.push(firewallModule);
         } else {
             callback(moduleName + ' does not define a check and an init function!');
