@@ -11,7 +11,7 @@
     };
 
     TestModule.prototype.check = function(req, res, cb) {
-        _logger.log('testAttack', req.ip);
+        _logger.log('testAttack' + req.url);
         if (cb) {
             cb();
         }

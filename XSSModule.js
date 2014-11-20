@@ -10,6 +10,8 @@
         _patterns.push(_xemplar.security.xss.simple);
         _patterns.push(_xemplar.security.xss.img);
         _patterns.push(_xemplar.security.xss.paranoid);
+        _patterns.push(/(\%22)(\%20)*[a-z0-9=\%22]*/i);
+        _patterns.push(/" [a-z]*="/i)
         _blocker = blocker;
         _logger = logger;
     };
@@ -24,10 +26,16 @@
         }
         
         function checkPostOrPutRequest(req, res, cb) {
+            var _keys;
+            var _reqElement;
+
             if (req.body) {
-                req.body.forEach(function (reqElement) {
+                _keys = Object.keys(req.body);
+                _keys.forEach(function (keyElement) {
+                    _reqElement = req.body[keyElement];
+                    //console.log(/" [a-z]*="/i.test(_reqElement));
                     _patterns.forEach(function (pattern) {
-                        if (pattern.test(reqElement) && _blocker.blockHost) {
+                        if (pattern.test(_reqElement) && _blocker.blockHost) {
                             handleAttack(_host);
                         }
                     });
