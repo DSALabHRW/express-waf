@@ -25,7 +25,7 @@ app.post('/test', function(req, res) {
     res.status(200).end('Hello world!');
 });
 
-app.listen(8080);
+var server = app.listen(8080);
 
 
 
@@ -105,4 +105,9 @@ exports.testAllowedMethod = function (test) {
         test.equals(r.statusCode, 200, 'This URL is normally allowed, when sending a referer and a whitelisted method');
         test.done();
     });
+};
+
+exports.closeServer = function (test) {
+    server.close();
+    test.done();
 };
