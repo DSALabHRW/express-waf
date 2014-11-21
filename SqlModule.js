@@ -1,5 +1,5 @@
 /**
- * SQL Injection protection.
+ * Provides an SQL Injection protection against many kinds of attacks.
  */
 (function() {
     var _config;
@@ -8,17 +8,39 @@
     var _logger;
 
     function SqlModule(config, blocker, logger) {
-        _logger.log('configure SQLInjModule!');
         _config = config;
         _blocker = blocker;
         _logger = logger;
 
         var _xemplar = require('xemplar');
-        _patternSql.push(_xemplar.security.sql)
-    };
+        _patternSql.push(_xemplar.security.sql);
+        //TODO (a big one) all these keywords could be packed in a better RegExp
+        _patternSql.push(/and/i); //TODO These keywords might appear in normal url
+        _patternSql.push(/or/i); //TODO These keywords might appear in normal url
+        _patternSql.push(/SELECT/i);
+        _patternSql.push(/UNION/i);
+        _patternSql.push(/JOIN/i);
+        _patternSql.push(/ORDER/i);
+        _patternSql.push(/GROUP/i);
+        _patternSql.push(/INSERT/i);
+        _patternSql.push(/UPDATE/i);
+        _patternSql.push(/\/\*/i);
+        _patternSql.push(/\*\//i);
+        _patternSql.push(/--/i);
+        _patternSql.push(/SUBSTRING/i);
+        _patternSql.push(/SLEEP/i);
+    }
 
+    /**
+     * Checks whether there is an SQL Injection Attack in the request.
+     * Checks the url and the body.
+     *
+     * @param req request from host
+     * @param res response to host
+     * @param cb to get back to the app
+     */
     SqlModule.prototype.check = function (req, res, cb) {
-        logger.log('Check SQL Injection');
+        _logger.log('Check SQL Injection');
         var _host = req.ip;
 
         if (req.method === 'GET' || req.method === 'DELETE') {
@@ -59,18 +81,17 @@
             if (cb) {
                 cb();
             }
-        };
+        }
 
+        /**
+         * Handles the attack by logging the host and blocking him.
+         */
         function handleAttack() {
             _logger.logAttack('SQL Injection', _host);
             _blocker.blockHost(_host);
-            res.status(403).send('Forbidden');
-        };
+            res.status(403).end();
+        }
     };
-
-
-
-
 
     module.exports = SqlModule;
 
