@@ -18,7 +18,7 @@
      */
     CSRF.prototype.check = function (req, res, next) {
         //on '/' the referer does not exists
-        if(req.url === '/') {
+        if(filterByUrls(req.url)) {
             next();
         } else {
             var headers = req.headers;
@@ -27,6 +27,20 @@
                 next();
             } else {
                 handleAttack(req.ip);
+            }
+        }
+
+        /**
+         * This method checks by configured whitelist, if the url is in the list of allowed urls without a
+         * referer in the header
+         * @param url
+         * @returns {boolean}
+         */
+        function filterByUrls(url) {
+            if(_config.refererIndependentUrls) {
+                return _config.refererIndependentUrls.indexOf(url) > -1;
+            } else {
+                return url === '/';
             }
         }
 
