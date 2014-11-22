@@ -15,6 +15,10 @@ waf.addModule('./XSSModule', {}, function(error) {
 waf.addModule('./LFIModule', {appInstance: app, publicPath: __dirname+"/test"}, function(error) {
     console.log(error);
 });
+waf.addModule('./SqlModule', {}, function(error) {
+    console.log(error);
+});
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
