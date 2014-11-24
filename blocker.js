@@ -36,8 +36,8 @@
                     });
                 }, _config.blockTime)
             }
-
-            cb();
+            if(cb)
+                cb();
         });
     };
 

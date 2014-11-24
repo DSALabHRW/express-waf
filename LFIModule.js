@@ -61,7 +61,7 @@
 
             var valid = false;
             for (var i = 0; i < _routes.length; i++) {
-                if (_routes[i].method === method && _routes[i].path === req.url) {
+                if (_routes[i].method === method && req.url.indexOf(_routes[i].path) > -1) {
                     valid = true;
                     break;
                 }
@@ -85,18 +85,15 @@
 
         function routeArray(){
             _routes = [];
-            _app._router.stack.forEach(function(route){
-                if(route.route){
-                    route.route.stack.forEach(function(r){
-                        _routes.push({
-                            method: r.method.toUpperCase(),
-                            path: route.route.path
-                        });
-                        console.log(r.method.toUpperCase()+"->"+route.route.path);
+            for(var i in _app.routes) {
+                for(var y in _app.routes[i]) {
+                    _routes.push({
+                        method: _app.routes[i][y].method.toUpperCase(),
+                        path: '/' + _app.routes[i][y].path.split('/')[1]
                     })
-                }
 
-            })
+                }
+            }
         }
     };
 
