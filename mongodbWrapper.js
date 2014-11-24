@@ -5,6 +5,7 @@
 
     var DEFAULT_COLLECTION_NAME = 'blocklist';
 
+    var _self;
     var _collection;
     var _db;
     var _host;
@@ -25,6 +26,7 @@
      * @attention This class is permanently holding a connection to the database.
      */
     function MongoDBWrapper(host, port, database, collection, username, password){
+        _self = this;
 
         if(arguments < 3){
             throw new Error("MongoDBWrapper constructor requires at least three arguments!");
@@ -85,17 +87,23 @@
     var _getBlockList = function(cb){
 
         if(!_isOpen){
-            throw Error("MongoDBWrapper must first be connected by using the open method!");
+            _self.open(function () {
+                getCollection();
+            })
+        } else {
+            getCollection();
         }
 
-        _db.collection(_collection, function (err, blocklist) {
-            if (err) {
-                console.log("Error while accessing collection: " + _collection);
-            }
-            else {
-                cb(blocklist);
-            }
-        });
+        function getCollection() {
+            _db.collection(_collection, function (err, blocklist) {
+                if (err) {
+                    console.log("Error while accessing collection: " + _collection);
+                }
+                else {
+                    cb(blocklist);
+                }
+            });
+        }
     }
 
     /**
