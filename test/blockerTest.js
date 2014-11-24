@@ -1,5 +1,5 @@
 var MongoDBWrapper = require('./../mongodbWrapper');
-var Blocker = require('./../Blocker');
+var Blocker = require('./../blocker');
 
 var mongodbwrapper = new MongoDBWrapper('localhost', 27017, 'blocklist', 'blocklist');
 var _blockTime = 0;
