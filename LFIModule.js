@@ -61,7 +61,7 @@
 
             var valid = false;
             for (var i = 0; i < _routes.length; i++) {
-                if (_routes[i].method === method && req.url.indexOf(_routes[i].path) > -1) {
+                if (_routes[i].method === method && new RegExp(_routes[i].regexp.toLowerCase()).test(req.url.split('?')[0].toLowerCase())) {
                     valid = true;
                     break;
                 }
@@ -70,7 +70,7 @@
         }
 
         function checkFileSystem(callback){
-            fs.exists(_publicPath+req.originalUrl,function(exists){
+            fs.exists(_publicPath+req.originalUrl.split('?')[0],function(exists){
                 callback(exists);
             });
 
@@ -89,7 +89,8 @@
                 for(var y in _app.routes[i]) {
                     _routes.push({
                         method: _app.routes[i][y].method.toUpperCase(),
-                        path: '/' + _app.routes[i][y].path.split('/')[1]
+                        path: _app.routes[i][y].path,
+                        regexp: _app.routes[i][y].regexp.source
                     })
 
                 }
