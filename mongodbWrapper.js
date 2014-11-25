@@ -88,7 +88,9 @@
 
         if(!_isOpen){
             _self.open(function () {
-                getCollection();
+                _self.removeAll(function() {
+                    getCollection();
+                });
             })
         } else {
             getCollection();
@@ -153,6 +155,23 @@
                 cb();
             });
         });
+    };
+
+    /**
+     * Remove all hosts from blocklist.
+     */
+    MongoDBWrapper.prototype.removeAll = function (cb) {
+        _getBlockList(function (blocklist) {
+            blocklist.remove({}, function (err) {
+                if(err) {
+                    console.log("Error while removing all hosts from Blocklist");
+                } else {
+                    console.log("Removed all Hosts from Blocklist")
+                }
+                if(cb)
+                    cb();
+            })
+        })
     }
 
     module.exports = MongoDBWrapper;
