@@ -38,7 +38,14 @@
          */
         function filterByUrls(url) {
             if(_config.refererIndependentUrls) {
-                return _config.refererIndependentUrls.indexOf(url) > -1;
+                var isRefererIndependend = false;
+                for(var i in _config.refererIndependentUrls) {
+                    if(new RegExp(_config.refererIndependentUrls[i]).test(url.split('?')[0])) {
+                        isRefererIndependend = true;
+						break;
+                    }
+                }
+                return isRefererIndependend;
             } else {
                 return url === '/';
             }

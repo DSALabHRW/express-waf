@@ -15,15 +15,15 @@
         var _xemplar = require('xemplar');
         _patternSql.push(_xemplar.security.sql);
         //TODO (a big one) all these keywords could be packed in a better RegExp
-        _patternSql.push(/and/i); //TODO These keywords might appear in normal url
-        _patternSql.push(/or/i); //TODO These keywords might appear in normal url
+        //_patternSql.push(/and/i); //TODO These keywords might appear in normal url
+        //_patternSql.push(/or/i); //TODO These keywords might appear in normal url
         _patternSql.push(/SELECT/i);
         _patternSql.push(/UNION/i);
         _patternSql.push(/JOIN/i);
         _patternSql.push(/ORDER/i);
         _patternSql.push(/GROUP/i);
         _patternSql.push(/INSERT/i);
-        _patternSql.push(/UPDATE/i);
+        //_patternSql.push(/UPDATE/i);
         _patternSql.push(/\/\*/i);
         _patternSql.push(/\*\//i);
         _patternSql.push(/--/i);
