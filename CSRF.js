@@ -23,7 +23,10 @@
         } else {
             var headers = req.headers;
 
-            if(headers.referer && headers.referer.indexOf(headers.host) > 0 && filterByMethods(req)) {
+            //W3C doesn't allow referer header to be set from programmer.
+            //But if we work with cordova this is important, so we use a x-referer header.
+            var referer = headers['referer'] || headers['x-referer'];
+            if(referer && referer.indexOf(headers.host) > 0 && filterByMethods(req)) {
                 next();
             } else {
                 handleAttack(req.ip);
