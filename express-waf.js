@@ -14,7 +14,7 @@
     };
 
     ExpressWAF.prototype.addModule = function (moduleName, config, callback) {
-        var FirewallModuleClass = require(moduleName);
+        var FirewallModuleClass = require('./' + moduleName); //search for modules in this directory
         var firewallModule;
         config.ipService = getIP;
 
@@ -56,5 +56,7 @@
         return ip;
     }
 
-    module.exports = ExpressWAF;
+    module.exports.ExpressWAF = ExpressWAF;
+
+    module.exports.MongoDBWrapper = require('./mongodbWrapper');
 })();
