@@ -17,8 +17,8 @@
      * @param next
      */
     CSRF.prototype.check = function (req, res, next) {
-        //on '/' the referer does not exists
-        if(filterByUrls(req.url)) {
+        //if url is whitelisted or user-agent is undefined, this is request without a browser, like java or curl
+        if(filterByUrls(req.url) || req.headers["user-agent"] === undefined) {
             next();
         } else {
             var headers = req.headers;
