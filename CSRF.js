@@ -17,6 +17,7 @@
      * @param next
      */
     CSRF.prototype.check = function (req, res, next) {
+        var _host = _config.ipService(req);
         //if url is whitelisted or user-agent is undefined, this is request without a browser, like java or curl
         if(filterByUrls(req.url) || req.headers["user-agent"] === undefined) {
             next();
@@ -29,7 +30,7 @@
             if(referer && referer.indexOf(headers.host) > 0 && filterByMethods(req)) {
                 next();
             } else {
-                handleAttack(req.ip);
+                handleAttack(_host);
             }
         }
 

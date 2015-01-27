@@ -8,6 +8,7 @@
         var BlockerClass = require('./blocker');
 
         _logger = new LoggerClass();
+        blockerConfig.ipService = getIP;
         _blocker = new BlockerClass(blockerConfig);
         _modules.push(_blocker);
     };
@@ -15,6 +16,7 @@
     ExpressWAF.prototype.addModule = function (moduleName, config, callback) {
         var FirewallModuleClass = require(moduleName);
         var firewallModule;
+        config.ipService = getIP;
 
         if (FirewallModuleClass.prototype.check) {
             firewallModule = new FirewallModuleClass(config, _blocker, _logger);
@@ -44,6 +46,15 @@
             }
         }
     };
+
+    function getIP(req) {
+        var ip = req.ip;
+        //if ip starts with 127 try to find a not localhost url
+        if(ip.indexOf('127') === 0) {
+            ip = req.headers['x-client-ip'] || req.headers['x-forwarded-for'] || ip;
+        }
+        return ip;
+    }
 
     module.exports = ExpressWAF;
 })();
