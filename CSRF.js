@@ -17,16 +17,20 @@
      * @param next
      */
     CSRF.prototype.check = function (req, res, next) {
-        //on '/' the referer does not exists
-        if(filterByUrls(req.url)) {
+        var _host = _config.ipService(req);
+        //if url is whitelisted or user-agent is undefined, this is request without a browser, like java or curl
+        if(filterByUrls(req.url) || req.headers["user-agent"] === undefined) {
             next();
         } else {
             var headers = req.headers;
 
-            if(headers.referer && headers.referer.indexOf(headers.host) > 0 && filterByMethods(req)) {
+            //W3C doesn't allow referer header to be set from programmer.
+            //But if we work with cordova this is important, so we use a x-referer header.
+            var referer = headers['referer'] || headers['x-referer'];
+            if(referer && referer.indexOf(headers.host) > 0 && filterByMethods(req)) {
                 next();
             } else {
-                handleAttack(req.ip);
+                handleAttack(_host);
             }
         }
 

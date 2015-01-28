@@ -6,6 +6,7 @@
     var _logger;
 
     function XSSModule(config, blocker, logger) {
+        _config = config;
         var _xemplar = require('xemplar');
         _patterns.push(_xemplar.security.xss.simple);
         _patterns.push(_xemplar.security.xss.img);
@@ -17,7 +18,7 @@
     };
 
     XSSModule.prototype.check = function(req, res, cb) {
-        var _host = req.ip;
+        var _host = _config.ipService(req);
 
         if (req.method === 'GET' || req.method === 'DELETE') {
             checkGetOrDeleteRequest(req, res, cb);

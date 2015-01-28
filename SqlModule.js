@@ -40,8 +40,7 @@
      * @param cb to get back to the app
      */
     SqlModule.prototype.check = function (req, res, cb) {
-        _logger.log('Check SQL Injection');
-        var _host = req.ip;
+        var _host = _config.ipService(req);
 
         if (req.method === 'GET' || req.method === 'DELETE') {
             checkGetOrDeleteRequest(req, res, cb);

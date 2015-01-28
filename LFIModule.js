@@ -6,16 +6,18 @@
     var _routes = [];
     var _app;
     var _publicPath;
+    var _config;
 
     function LFI(config, blocker, logger) {
         _app = config.appInstance;
+        _config = config;
         _publicPath = config.publicPath;
         _blocker = blocker;
         _logger = logger;
     };
 
     LFI.prototype.check = function(req, res, cb) {
-        var _host = req.ip;
+        var _host = _config.ipService(req);
         var _validPattern = true;
         if (req.method === 'GET' || req.method === 'DELETE') {
             _validPattern = checkGetOrDeleteRequest(req, res, cb);

@@ -42,7 +42,8 @@
     };
 
     Blocker.prototype.isHostBlocked = function(cb){
-        _config.db.contains(req.ip, function(isBlocked){
+        var ip = _config.ipService(req);
+        _config.db.contains(ip, function(isBlocked){
             cb(isBlocked);
         });
     };
@@ -52,7 +53,8 @@
      * the callback won't be called.
      */
     Blocker.prototype.check = function(req, res, cb) {
-        _config.db.contains(req.ip, function(isBlocked){
+        var ip = _config.ipService(req);
+        _config.db.contains(ip, function(isBlocked){
             if(!isBlocked){
                 cb();
             }
@@ -61,6 +63,7 @@
             }
         })
     };
+
 
     module.exports = Blocker;
 
