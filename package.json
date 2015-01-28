@@ -2,7 +2,7 @@
   "name": "express-waf",
   "version": "0.0.1",
   "description": "A simple Web Application Firewall (WAF)",
-  "main": "app.js",
+  "main": "express-waf.js",
   "scripts": {
     "test": "nodeunit"
   },
